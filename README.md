@@ -14,7 +14,7 @@ pip install -r requirements.txt
 ## usage
 
 ```
-python sg list # list all commands
+python sg.py list # list all commands
 
 python sg.py <command>
 ```

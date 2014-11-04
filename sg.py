@@ -38,6 +38,8 @@ from collections import defaultdict
 import pydoc
 
 from decorator import decorator
+from clint.textui import puts, indent, colored
+
 
 from surveygizmo import SurveyGizmo
 
@@ -153,6 +155,17 @@ all_actions.update({
   "list": listall
 })
 
+
+def fmt(name, fn):
+  [puts(x, False) for x in [
+    colored.blue('action'),
+    " ",
+    colored.red(name)
+  ]]
+  puts("")
+  with indent(4):
+    puts(pydoc.render_doc(fn, "%s"))
+
 if __name__ == "__main__":
   # get user, pass
   # setup sg
@@ -164,10 +177,10 @@ if __name__ == "__main__":
   # same as 'help' but printable
   if myaction == "list":
     for k,v in sorted(all_actions.iteritems()):
-      print k, pydoc.render_doc(v, "%s")
+      fmt(k,v)
 
   else:
-    print pydoc.render_doc(all_actions[myaction], "%s")
+    fmt(myaction, all_actions[myaction])
   sys.exit(0)
 
 

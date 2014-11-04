@@ -1,6 +1,24 @@
+Genshi==0.7
+Pygments==1.6
 SurveyGizmo==0.2.0
+argparse==1.2.1
 args==0.1.0
 clint==0.4.1
+dateutils==0.6.6
+decorator==3.4.0
+git-remote-helpers==0.1.0
+-e hg+https://bitbucket.org/durin42/histedit@4a974c8dee3a06b22add15c54a0942a573b01e42#egg=hg_histedit-dev
+ipython==2.1.0
+mercurial==2.9
+pluckr==0.0.7
+python-dateutil==2.2
+pytz==2014.2
 rauth==0.7.0
+readline==6.2.4.1
 requests==1.2.3
+six==1.6.1
+-e hg+http://hg.mozilla.org/webtools/telemetry-experiment-server@adcf221cc6c8e6d5250f5085438077cf6b7ce190#egg=telemetry_experiment_server-dev
+vboxapi==1.0
+virtualenv==1.7
+virtualenvwrapper==2.10.1
 wsgiref==0.1.2

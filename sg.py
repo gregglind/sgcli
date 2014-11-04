@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 
 Usage:
@@ -31,9 +33,15 @@ sg open id  # <- in browser / web?
 07:33 < ilana> either put it back in testing mode or remove the survey completely
 
 """
+import sys
+from collections import defaultdict
+import pydoc
+
+from decorator import decorator
 
 from surveygizmo import SurveyGizmo
 
+"""
 sg = SurveyGizmo(api_version='v3', response_type='json')
 sg.config.auth_method = "user:pass"
 sg.config.username = "username"
@@ -44,14 +52,23 @@ sg.api.survey.list()
 sg.api.survey.get('39501')
 sg.api.survey.copy('39501', '39501 Copy')
 sg.api.surveyresponse.list('39501')
+"""
 
-# thing to support
+# decorators
 
-def action(fn):
-  def inner(*args,**kwargs):
-    return fn(*args, **kwargs)
+@decorator
+def action(fn, *args, **kwargs):
+  print "action, calling with %s with args %s, %s" % (f.func_name, args, kw)
+  return fn(*args, **kwargs)
 
-  return inner
+@decorator
+def web_action(fn, *args, **kwargs):
+  """ supports --web interface """
+  # basically, if --web is passed, do something useful with it.
+  print "action, calling with %s with args %s, %s" % (f.func_name, args, kw)
+  return fn(*args, **kwargs)
+
+
 
 ## actions
 
@@ -98,12 +115,61 @@ def web(surveyid):
   """ opens survey in browser """
   pass
 
-if __name__ == "main":
+
+@action
+def bug(surveyid):
+  """ does this bug sg, or bug people about sg-cli """
+  pass
+
+
+@action
+def nullaction():
+  """ this action doesn't exist."""
+  pass
+
+@action
+def _help():
+  """ should this be sg help, or client help? """
+  pass
+
+@action
+def listall():
+  """ list all known actions with help"""
+  pass
+
+# yes, this is gross.
+all_actions = defaultdict(lambda:nullaction)
+all_actions.update({
+  "adduser": adduser,
+  "users": users,
+  "help": _help,
+  "bug": bug,
+  "web": web,
+  "edit": edit,
+  "download": download,
+  "search": search,
+  "adminreport":  adminreport,
+  "my": my,
+  "list": listall
+})
+
+if __name__ == "__main__":
   # get user, pass
   # setup sg
   # run action
   # dump
   # exit
-  pass
+  import sys
+  myaction = (sys.argv[1] if len(sys.argv) > 1 else 'my').lower()
+  # same as 'help' but printable
+  if myaction == "list":
+    for k,v in sorted(all_actions.iteritems()):
+      print k, pydoc.render_doc(v, "%s")
+
+  else:
+    print pydoc.render_doc(all_actions[myaction], "%s")
+  sys.exit(0)
+
+
 
 
